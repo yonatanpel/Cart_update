@@ -8,7 +8,9 @@ from pathlib import Path
 import io
 import re
 
-DB_PATH = Path("data/cartiq.db")
+BASE_DIR = Path(__file__).parent
+DB_PATH = BASE_DIR / "data" / "cartiq.db"
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 # שופרסל — מחירים ציבוריים ישירות מ-Azure Blob Storage
 SHUFERSAL_INDEX = "https://prices.shufersal.co.il/FileObject/UpdateCategory?catID=2&storeId=1"

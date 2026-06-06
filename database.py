@@ -1,7 +1,10 @@
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path("data/cartiq.db")
+# נתיב מוחלט — עובד גם ב-Streamlit Cloud וגם מקומית
+BASE_DIR = Path(__file__).parent
+DB_PATH = BASE_DIR / "data" / "cartiq.db"
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 def get_connection():
     return sqlite3.connect(DB_PATH)

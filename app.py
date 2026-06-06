@@ -471,7 +471,7 @@ label, p, span, div, h1, h2, h3, h4, h5 { direction: rtl !important; }
 </style>
 """, unsafe_allow_html=True)
 
-DATA_DIR = Path("data")
+DATA_DIR = Path(__file__).parent
 
 @st.cache_data(ttl=60)
 def load_data():

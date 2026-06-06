@@ -3,7 +3,7 @@ from pathlib import Path
 from database import get_connection, create_tables
 from fetch_prices import determine_category
 
-DATA_DIR = Path("data")
+DATA_DIR = Path(__file__).parent / "data"
 
 def load_csv_to_db():
     conn = get_connection()

@@ -477,8 +477,8 @@ DATA_DIR = Path("data")
 def load_data():
     db_path = DATA_DIR / "cartiq.db"
     if not db_path.exists():
-        st.error("מסד הנתונים לא נמצא! הרץ init_db.py קודם.")
-        st.stop()
+        from init_db import load_csv_to_db
+        load_csv_to_db()
     conn = sqlite3.connect(db_path)
     products = pd.read_sql_query("SELECT * FROM products", conn)
     chains = pd.read_sql_query("SELECT * FROM chains", conn)

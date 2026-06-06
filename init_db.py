@@ -3,8 +3,8 @@ from pathlib import Path
 from database import get_connection, create_tables
 from fetch_prices import determine_category
 
-BASE = Path(__file__).parent
-DATA_DIR = BASE / "data" if (BASE / "data").exists() else BASE
+DATA_DIR = Path(__file__).parent
+
 def load_csv_to_db():
     conn = get_connection()
     cursor = conn.cursor()

@@ -1,6 +1,15 @@
 [theme]
-base = "dark"
-primaryColor = "#00c896"
-backgroundColor = "#0b0f1a"
-secondaryBackgroundColor = "#111827"
-textColor = "#e2e8f0"
+# הגדרת בסיס בהיר למערכת
+base = "light"
+
+# צבע הרקע הראשי של האתר (אפור בהיר מאוד)
+backgroundColor = "#F4F4F5"
+
+# צבע הרקע המשני לסרגל הצד ואזורים נוספים (אפור עכבר עדין)
+secondaryBackgroundColor = "#D4D4D8"
+
+# צבע הטקסט (אפור כהה מאוד/כמעט שחור לקריאה נוחה)
+textColor = "#27272A"
+
+# צבע ראשי לכפתורים, כרטיסיות נבחרות וסליידרים (אפור עכבר עמוק)
+primaryColor = "#52525B"

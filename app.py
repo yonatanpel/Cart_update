@@ -7,25 +7,7 @@ import time
 import threading
 from datetime import datetime
 from fetch_prices import fetch_all_chains
-# --- הזרקת עיצוב מותאם אישית (אפור-עכבר בהיר) ---
-st.markdown("""
-<style>
-    /* צבע הרקע הראשי של כל האפליקציה */
-    .stApp {
-        background-color: #F4F4F5 !important;
-    }
-    
-    /* צבע הטקסט הראשי - אפור כהה מאוד לקריאה נוחה */
-    .stApp p, .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6, .stApp span, .stApp label {
-        color: #27272A !important;
-    }
-    
-    /* עיצוב סרגל הצד (אם אנחנו משתמשים בו) לאפור עכבר נעים */
-    [data-testid="stSidebar"] {
-        background-color: #D4D4D8 !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+
 
 # --- Scheduler: עדכון אוטומטי כל יום ב-06:00 ---
 def _scheduler_loop():

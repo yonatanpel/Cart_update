@@ -23,6 +23,7 @@ DERIVED_CHAINS = {
     2: {"name": "רמי לוי",  "multiplier": 0.88, "noise": 0.06},
     3: {"name": "יוחננוף",  "multiplier": 0.96, "noise": 0.04},
     4: {"name": "ויקטורי",  "multiplier": 1.02, "noise": 0.05},
+    5: {"name": "אושר עד",  "multiplier": 0.90, "noise": 0.07},
 }
 
 HEADERS = {

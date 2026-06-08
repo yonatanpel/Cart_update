@@ -8,6 +8,39 @@ import threading
 from datetime import datetime
 from fetch_prices import fetch_all_chains
 
+# --- כפיית עיצוב: רקע בהיר, טקסט קריא וכותרות ירוקות ---
+st.markdown("""
+<style>
+    /* כפיית רקע בהיר על כל האפליקציה */
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+        background-color: #F8FAFC !important;
+    }
+    
+    /* כפיית טקסט כהה-כחלחל על כל האלמנטים כדי שיהיה קריא על הרקע הבהיר */
+    .stApp p, .stApp span, .stApp div, .stApp label, .stApp li {
+        color: #1E293B !important;
+    }
+    
+    /* כותרות בירוק-אמרלד הייטקיסטי */
+    h1, h2, h3, h4, h5, h6 {
+        color: #10B981 !important;
+    }
+    
+    /* כפתורים: רקע ירוק וטקסט לבן */
+    .stButton>button {
+        background-color: #10B981 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+    }
+    
+    /* שדות קלט (איפה שמקלידים את שם המוצר) */
+    .stTextInput>div>div>input {
+        background-color: #FFFFFF !important;
+        color: #1E293B !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 
 # --- Scheduler: עדכון אוטומטי כל יום ב-06:00 ---
 def _scheduler_loop():

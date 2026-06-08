@@ -493,12 +493,23 @@ with tab1:
         filtered = products[products["category"] == category]
 
     total_found = len(filtered)
-    st.markdown(f"""
-    <div style="display:flex;align-items:center;gap:10px;margin:16px 0 12px;">
-        <span style="font-weight:700;color:#1E293B;font-size:17px">{category if not search else "תוצאות חיפוש"}</span>
-        <span style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:20px;padding:2px 12px;font-size:13px;color:#047857;font-weight:600">{total_found:,} מוצרים</span>
-    </div>
-    """, unsafe_allow_html=True)
+   # פריסה חדשה של 3 כרטיסים על כל הרוחב
+                st.markdown(f"""
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 24px 0;">
+                    <div class="kpi-card">
+                        <div class="kpi-label">עלות מפוצלת (ILP)</div>
+                        <div class="kpi-value green">&#8362;{opt_total:.2f}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">רשת זולה יחידה</div>
+                        <div class="kpi-value">&#8362;{single_cost:.2f}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">חיסכון בפיצול</div>
+                        <div class="kpi-value amber">&#8362;{saving:.2f} <span style="font-size:16px">({saving_pct}%)</span></div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
 
     for _, product in filtered.head(50).iterrows():
         product_id = str(product["product_id"])

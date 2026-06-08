@@ -8,39 +8,8 @@ import threading
 from datetime import datetime
 from fetch_prices import fetch_all_chains
 
-# --- כפיית עיצוב: רקע בהיר, טקסט קריא וכותרות ירוקות ---
-st.markdown("""
-<style>
-    /* כפיית רקע בהיר על כל האפליקציה */
-    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-        background-color: #F8FAFC !important;
-    }
-    
-    /* כפיית טקסט כהה-כחלחל על כל האלמנטים כדי שיהיה קריא על הרקע הבהיר */
-    .stApp p, .stApp span, .stApp div, .stApp label, .stApp li {
-        color: #1E293B !important;
-    }
-    
-    /* כותרות בירוק-אמרלד הייטקיסטי */
-    h1, h2, h3, h4, h5, h6 {
-        color: #10B981 !important;
-    }
-    
-    /* כפתורים: רקע ירוק וטקסט לבן */
-    .stButton>button {
-        background-color: #10B981 !important;
-        color: #FFFFFF !important;
-        border: none !important;
-    }
-    
-    /* שדות קלט (איפה שמקלידים את שם המוצר) */
-    .stTextInput>div>div>input {
-        background-color: #FFFFFF !important;
-        color: #1E293B !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
+# הגדרת תצורת עמוד ראשונית
+st.set_page_config(page_title="CartIQ | סל קניות חכם", page_icon="C", layout="wide")
 
 # --- Scheduler: עדכון אוטומטי כל יום ב-06:00 ---
 def _scheduler_loop():
@@ -56,14 +25,12 @@ if "scheduler_started" not in st.session_state:
     t.start()
     st.session_state["scheduler_started"] = True
 
-# הגדרת תצורת עמוד ראשונית
-st.set_page_config(page_title="CartIQ | סל קניות חכם", page_icon="C", layout="wide")
-
+# --- העיצוב המאוחד והבהיר ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
 
-/* ===== GLOBAL — DARK BACKGROUND ===== */
+/* ===== GLOBAL — LIGHT BACKGROUND ===== */
 html, body,
 .stApp,
 [data-testid="stAppViewContainer"],
@@ -78,8 +45,8 @@ section.main > div,
     font-family: 'Heebo', sans-serif !important;
     direction: rtl;
     text-align: right;
-    background-color: #0b0f1a !important;
-    color: #cbd5e1 !important;
+    background-color: #F8FAFC !important;
+    color: #1E293B !important;
 }
 
 /* override any white backgrounds left over */
@@ -93,8 +60,8 @@ section.main > div,
 #MainMenu, footer, header { visibility: hidden; }
 
 ::-webkit-scrollbar { width: 7px; }
-::-webkit-scrollbar-track { background: #0b0f1a; }
-::-webkit-scrollbar-thumb { background: #00c896; border-radius: 4px; }
+::-webkit-scrollbar-track { background: #F1F5F9; }
+::-webkit-scrollbar-thumb { background: #10B981; border-radius: 4px; }
 
 /* ===== 3D HERO ===== */
 .hero {
@@ -102,7 +69,7 @@ section.main > div,
     margin-bottom: 28px;
 }
 .hero-inner {
-    background: linear-gradient(160deg, #0d2137 0%, #0a3d2e 50%, #061c14 100%);
+    background: linear-gradient(160deg, #FFFFFF 0%, #F1F5F9 100%);
     border-radius: 24px;
     padding: 60px 40px 52px;
     text-align: center;
@@ -110,42 +77,13 @@ section.main > div,
     overflow: hidden;
     transform: perspective(900px) rotateX(3deg);
     transform-style: preserve-3d;
-    box-shadow:
-    0 2px 0 rgba(0,200,150,0.15),
-    0 6px 0 rgba(0,160,120,0.1),
-    0 14px 0 rgba(0,100,80,0.07),
-    0 30px 60px rgba(0,0,0,0.6),
-    0 60px 120px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(0,255,180,0.15),
-    inset 0 -1px 0 rgba(0,0,0,0.4);
-    border: 1px solid rgba(0,200,150,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05), border: 1px solid rgba(16,185,129,0.2);
+    border: 1px solid rgba(16,185,129,0.2);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 .hero-inner:hover {
     transform: perspective(900px) rotateX(1deg) translateY(-4px);
-    box-shadow:
-    0 2px 0 rgba(0,200,150,0.2),
-    0 8px 0 rgba(0,160,120,0.12),
-    0 20px 0 rgba(0,100,80,0.08),
-    0 40px 80px rgba(0,0,0,0.65),
-    0 80px 140px rgba(0,0,0,0.45),
-    inset 0 1px 0 rgba(0,255,180,0.2);
-}
-.hero-inner::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(0,255,180,0.6) 50%, transparent 100%);
-}
-.hero-inner::after {
-    content: '';
-    position: absolute;
-    top: -100px; left: 50%;
-    transform: translateX(-50%);
-    width: 600px; height: 200px;
-    background: radial-gradient(ellipse, rgba(0,200,150,0.12) 0%, transparent 70%);
-    pointer-events: none;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
 }
 .hero-wordmark {
     font-size: 80px;
@@ -153,92 +91,82 @@ section.main > div,
     letter-spacing: -5px;
     line-height: 1;
     margin: 0 0 10px 0;
-    background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #00c896 100%);
+    background: linear-gradient(135deg, #047857 0%, #10B981 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 2px 8px rgba(0,200,150,0.4));
 }
 .hero-sub {
     font-size: 17px;
-    color: #6ee7b7;
-    font-weight: 400;
+    color: #475569;
+    font-weight: 500;
     margin: 0;
     letter-spacing: 0.3px;
 }
 
 /* ===== STATUS BAR ===== */
 .status-bar {
-    background: linear-gradient(135deg, #111827 0%, #0f1f2e 100%);
+    background: #FFFFFF;
     border-radius: 16px;
     padding: 14px 22px;
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-    border: 1px solid rgba(0,200,150,0.15);
-    box-shadow:
-    0 4px 0 rgba(0,0,0,0.3),
-    0 8px 24px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid rgba(16,185,129,0.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 .status-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(0,200,150,0.08);
-    border: 1px solid rgba(0,200,150,0.2);
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
     border-radius: 20px;
     padding: 4px 14px;
     font-size: 13px;
-    color: #6ee7b7;
-    font-weight: 500;
+    color: #047857;
+    font-weight: 600;
 }
 
 /* ===== TABS ===== */
 .stTabs [data-baseweb="tab-list"] {
-    background: #111827 !important;
+    background: #E2E8F0 !important;
     border-radius: 16px !important;
     padding: 6px !important;
     gap: 4px !important;
-    border: 1px solid rgba(0,200,150,0.12) !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04) !important;
 }
 .stTabs [data-baseweb="tab"] {
     border-radius: 12px !important;
     padding: 10px 28px !important;
     font-weight: 600 !important;
     font-size: 15px !important;
-    color: #6b7280 !important;
+    color: #475569 !important;
     transition: all 0.25s !important;
     border: none !important;
     background: transparent !important;
 }
 .stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg, #007a5e, #00c896) !important;
+    background: linear-gradient(135deg, #10B981, #34D399) !important;
     color: #ffffff !important;
-    box-shadow:
-    0 2px 0 rgba(0,100,80,0.8),
-    0 5px 15px rgba(0,200,150,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.2) !important;
-    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 10px rgba(16,185,129,0.3) !important;
 }
 .stTabs [data-baseweb="tab-panel"] {
-    background: #111827 !important;
+    background: #FFFFFF !important;
     border-radius: 20px !important;
     padding: 28px !important;
     margin-top: 12px !important;
-    border: 1px solid rgba(0,200,150,0.1) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(16,185,129,0.2) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03) !important;
 }
 
-/* ===== SECTION TITLE ===== */
-.section-title {
+/* ===== SECTION TITLE (GREEN) ===== */
+.section-title, h1, h2, h3, h4, h5, h6 {
     font-size: 20px;
     font-weight: 700;
-    color: #f0fdf4;
+    color: #10B981 !important;
     margin-bottom: 20px;
     padding-bottom: 12px;
-    border-bottom: 2px solid rgba(0,200,150,0.35);
+    border-bottom: 2px solid rgba(16,185,129,0.35);
     display: inline-block;
 }
 
@@ -246,35 +174,30 @@ section.main > div,
 .stTextInput > div > div > input,
 .stSelectbox > div > div,
 [data-testid="stNumberInput"] input {
-    background: #0d1520 !important;
+    background: #FFFFFF !important;
     border-radius: 12px !important;
-    border: 1px solid rgba(0,200,150,0.2) !important;
-    color: #e2e8f0 !important;
+    border: 1px solid rgba(16,185,129,0.3) !important;
+    color: #1E293B !important;
     font-family: 'Heebo', sans-serif !important;
     font-size: 15px !important;
-    transition: all 0.2s !important;
     direction: rtl !important;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.3) !important;
 }
 .stTextInput > div > div > input:focus {
-    border-color: #00c896 !important;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.3), 0 0 0 3px rgba(0,200,150,0.15) !important;
+    border-color: #10B981 !important;
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.15) !important;
 }
-.stSelectbox > div > div > div { color: #e2e8f0 !important; }
 
 /* ===== CHECKBOXES ===== */
 [data-testid="stCheckbox"] label {
     font-size: 15px !important;
     font-weight: 500 !important;
-    color: #cbd5e1 !important;
+    color: #1E293B !important;
 }
 [data-testid="stCheckbox"] div[role="checkbox"] {
-    border-color: rgba(0,200,150,0.4) !important;
-    background: #0d1520 !important;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important;
+    border-color: #10B981 !important;
 }
 
-/* ===== 3D KPI CARDS ===== */
+/* ===== KPI CARDS (LIGHT THEME) ===== */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -282,226 +205,114 @@ section.main > div,
     margin: 24px 0;
 }
 .kpi-card {
-    background: linear-gradient(145deg, #1a2744, #111827);
+    background: #FFFFFF;
     border-radius: 20px;
     padding: 26px 18px 22px;
     text-align: center;
     position: relative;
-    border: 1px solid rgba(0,200,150,0.15);
-    box-shadow:
-    0 2px 0 rgba(0,0,0,0.4),
-    0 6px 0 rgba(0,0,0,0.3),
-    0 12px 0 rgba(0,0,0,0.15),
-    0 20px 40px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-    transform: perspective(600px) rotateX(2deg);
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     transition: all 0.3s ease;
 }
 .kpi-card:hover {
-    transform: perspective(600px) rotateX(0deg) translateY(-6px);
-    box-shadow:
-    0 2px 0 rgba(0,0,0,0.4),
-    0 10px 0 rgba(0,0,0,0.2),
-    0 30px 60px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-    border-color: rgba(0,200,150,0.35);
-}
-.kpi-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 10%; right: 10%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,200,150,0.4), transparent);
-    border-radius: 50%;
-}
-.kpi-card.savings {
-    background: linear-gradient(145deg, #1f1a0a, #2a1f06);
-    border-color: rgba(245,158,11,0.2);
-}
-.kpi-card.savings::before { background: linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent); }
-.kpi-card.time {
-    background: linear-gradient(145deg, #1a1030, #110d22);
-    border-color: rgba(139,92,246,0.2);
-}
-.kpi-card.time::before { background: linear-gradient(90deg, transparent, rgba(139,92,246,0.5), transparent); }
-.kpi-card.single {
-    background: linear-gradient(145deg, #141e2e, #0e1624);
-    border-color: rgba(100,116,139,0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+    border-color: #10B981;
 }
 .kpi-label {
     font-size: 11px;
     font-weight: 700;
-    color: #4b5563;
+    color: #64748B;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 10px;
 }
-.kpi-value { font-size: 30px; font-weight: 900; color: #f1f5f9; line-height: 1; }
-.kpi-value.green { color: #00c896; text-shadow: 0 0 20px rgba(0,200,150,0.4); }
-.kpi-value.amber { color: #f59e0b; text-shadow: 0 0 20px rgba(245,158,11,0.3); }
-.kpi-value.purple { color: #a78bfa; text-shadow: 0 0 20px rgba(167,139,250,0.3); }
+.kpi-value { font-size: 30px; font-weight: 900; color: #1E293B; line-height: 1; }
+.kpi-value.green { color: #10B981; }
+.kpi-value.amber { color: #F59E0B; }
+.kpi-value.purple { color: #8B5CF6; }
 
 /* ===== 3D CHAIN BARS ===== */
 .chain-bar-wrap { margin: 10px 0; }
 .chain-bar-label {
-    font-size: 14px; font-weight: 600; color: #9ca3af;
+    font-size: 14px; font-weight: 600; color: #475569;
     margin-bottom: 5px; display: flex; justify-content: space-between;
 }
 .chain-bar-bg {
-    background: #0d1520;
+    background: #E2E8F0;
     border-radius: 8px; height: 16px; overflow: hidden;
-    box-shadow: inset 0 3px 8px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.05);
 }
 .chain-bar-fill {
     height: 100%; border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,200,150,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
-    background: linear-gradient(90deg, #007a5e, #00c896);
-    transition: width 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+    background: linear-gradient(90deg, #10B981, #34D399);
+    transition: width 0.8s ease;
 }
 
 /* ===== 3D DETAIL TABLE ===== */
 .detail-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 .detail-table th {
-    background: #0d1520;
-    color: #4b5563;
+    background: #F1F5F9;
+    color: #475569;
     font-size: 11px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1px;
     padding: 12px 16px; text-align: right;
-    border-bottom: 1px solid rgba(0,200,150,0.15);
+    border-bottom: 1px solid #CBD5E1;
 }
 .detail-table td {
     padding: 13px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 14px; color: #cbd5e1; vertical-align: middle;
-}
-.detail-table tr:hover td {
-    background: rgba(0,200,150,0.04);
-    color: #f1f5f9;
+    border-bottom: 1px solid #E2E8F0;
+    font-size: 14px; color: #1E293B; vertical-align: middle;
 }
 .chain-badge {
     display: inline-block; padding: 3px 12px;
     border-radius: 20px; font-size: 12px; font-weight: 700;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
 }
-.badge-1 { background: rgba(0,200,150,0.15); color: #00c896; border: 1px solid rgba(0,200,150,0.25); }
-.badge-2 { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
-.badge-3 { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
-.badge-4 { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+.badge-1 { background: rgba(16,185,129,0.15); color: #047857; }
+.badge-2 { background: rgba(239,68,68,0.15); color: #B91C1C; }
+.badge-3 { background: rgba(59,130,246,0.15); color: #1D4ED8; }
+.badge-4 { background: rgba(245,158,11,0.15); color: #B45309; }
 
-/* ===== 3D CART ITEMS ===== */
+/* ===== CART ITEMS ===== */
 .cart-item {
     display: flex; justify-content: space-between; align-items: center;
     padding: 13px 18px; margin-bottom: 7px;
-    background: linear-gradient(135deg, #131f30, #0f1824);
+    background: #FFFFFF;
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 6px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
-    transition: all 0.2s;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
-.cart-item:hover {
-    transform: translateX(-3px) translateY(-1px);
-    border-color: rgba(0,200,150,0.2);
-    box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 12px 24px rgba(0,0,0,0.35);
-}
-.cart-item-name { font-weight: 600; color: #e2e8f0; font-size: 14px; }
+.cart-item-name { font-weight: 600; color: #1E293B; font-size: 14px; }
 .cart-item-qty {
-    background: linear-gradient(135deg, #007a5e, #00c896);
+    background: linear-gradient(135deg, #10B981, #34D399);
     color: white; border-radius: 20px; padding: 3px 14px;
     font-size: 13px; font-weight: 700;
-    box-shadow: 0 2px 0 #005240, 0 4px 12px rgba(0,200,150,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .cat-header {
-    font-size: 11px; font-weight: 700; color: #00c896;
-    text-transform: uppercase; letter-spacing: 1.2px;
+    font-size: 11px; font-weight: 700; color: #10B981;
     padding: 14px 0 7px;
-    border-bottom: 1px solid rgba(0,200,150,0.2);
+    border-bottom: 1px solid rgba(16,185,129,0.2);
     margin-bottom: 10px; margin-top: 18px;
 }
 
-/* ===== 3D BUTTONS ===== */
+/* ===== GREEN BUTTONS (WHITE TEXT) ===== */
 .stButton > button {
     border-radius: 12px !important;
     font-family: 'Heebo', sans-serif !important;
     font-weight: 700 !important;
     font-size: 15px !important;
     padding: 10px 24px !important;
-    transition: all 0.18s ease !important;
     border: none !important;
-    background: linear-gradient(135deg, #0f1a24, #1a2744) !important;
-    color: #6ee7b7 !important;
-    box-shadow:
-    0 4px 0 rgba(0,0,0,0.5),
-    0 8px 20px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.07) !important;
-    border: 1px solid rgba(0,200,150,0.15) !important;
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 10px rgba(16,185,129,0.3) !important;
 }
 .stButton > button:hover {
-    transform: translateY(-3px) !important;
-    box-shadow:
-    0 7px 0 rgba(0,0,0,0.5),
-    0 14px 30px rgba(0,0,0,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.1) !important;
-    color: #a7f3d0 !important;
+    background: #059669 !important;
+    color: #FFFFFF !important;
+    transform: translateY(-2px) !important;
 }
 .stButton > button:active {
-    transform: translateY(2px) !important;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3) !important;
+    transform: translateY(1px) !important;
 }
-.stButton > button[kind="primary"],
-.stButton > button[data-testid="baseButton-primary"] {
-    background: linear-gradient(135deg, #007a5e, #00c896) !important;
-    color: #ffffff !important;
-    border: none !important;
-    box-shadow:
-    0 4px 0 #004d3a,
-    0 8px 24px rgba(0,200,150,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.2) !important;
-}
-.stButton > button[kind="primary"]:hover {
-    box-shadow:
-    0 7px 0 #004d3a,
-    0 16px 36px rgba(0,200,150,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.25) !important;
-}
-.stButton > button[kind="primary"]:active {
-    box-shadow: 0 1px 0 #004d3a, 0 4px 12px rgba(0,200,150,0.25) !important;
-}
-
-/* ===== ALERTS ===== */
-[data-testid="stAlert"] {
-    border-radius: 14px !important;
-    background: rgba(0,200,150,0.08) !important;
-    border: 1px solid rgba(0,200,150,0.2) !important;
-    color: #a7f3d0 !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04) !important;
-}
-
-/* ===== METRIC ===== */
-[data-testid="stMetric"] {
-    background: linear-gradient(145deg, #131f30, #0f1824);
-    border-radius: 16px; padding: 18px;
-    border: 1px solid rgba(0,200,150,0.12);
-    box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
-}
-[data-testid="stMetricLabel"] { color: #4b5563 !important; font-weight: 600 !important; font-size: 13px !important; }
-[data-testid="stMetricValue"] { font-size: 26px !important; font-weight: 900 !important; color: #00c896 !important; }
-
-/* ===== CAPTION ===== */
-[data-testid="stCaptionContainer"] p { font-size: 13px !important; color: #4b5563 !important; }
-
-/* ===== NUMBER INPUT ===== */
-[data-testid="stNumberInput"] input {
-    background: #0d1520 !important;
-    color: #e2e8f0 !important;
-    border-radius: 10px !important;
-    border: 1px solid rgba(0,200,150,0.2) !important;
-    text-align: center !important;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.3) !important;
-}
-
-/* RTL */
-label, p, span, div, h1, h2, h3, h4, h5 { direction: rtl !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -525,7 +336,6 @@ def load_data():
     chains["chain_id"] = chains["chain_id"].astype(int)
     return products, chains, prices, promotions
 
-
 def get_discount(product_id, chain_id, base_total, promotions):
     if promotions.empty:
         return 0
@@ -537,7 +347,6 @@ def get_discount(product_id, chain_id, base_total, promotions):
         elif row["promotion_type"] == "percent":
             discount += base_total * float(row["discount_value"]) / 100
     return discount
-
 
 def calculate_costs(cart, prices, chains, promotions):
     results = []
@@ -564,14 +373,7 @@ def calculate_costs(cart, prices, chains, promotions):
             })
     return pd.DataFrame(results) if results else pd.DataFrame(columns=["chain_id", "רשת", "עלות סל", "מוצרים זמינים"])
 
-
 def optimize_split_purchase(cart, prices, chains, promotions, budget=0):
-    """
-    ILP לרכישה מפוצלת.
-    משתנים: x[i,j] in {0,1}
-    מטרה: min sum effective_cost[i,j] * x[i,j]
-    אילוצים: sum_j x[i,j] = 1 לכל i; sum <= budget אם הוגדר
-    """
     product_ids = list(cart.keys())
     chain_ids = list(chains["chain_id"].astype(int))
     chain_names = dict(zip(chains["chain_id"].astype(int), chains["chain_name"]))
@@ -618,7 +420,6 @@ def optimize_split_purchase(cart, prices, chains, promotions, budget=0):
                 "cost": round(effective[pid][cid], 2),
             }
     return total_cost, True, assignment
-
 
 # ===== LOAD DATA =====
 products, chains, prices, promotions = load_data()
@@ -673,13 +474,6 @@ tab1, tab2, tab3 = st.tabs([
 
 # ===== TAB 1: PRODUCTS =====
 with tab1:
-    cat_icons = {
-        "ירקות": "", "פירות": "", "ביצים, חלב וגבינות": "",
-        "קצביה": "", "מוצרים קפואים": "", "מאפים ולחם": "",
-        "טואלטיקה": "", "מוצרי ניקוי": "", "אירוח": "",
-        "מזווה": "", "כללי": ""
-    }
-
     st.markdown('<div class="section-title">חיפוש והוספת מוצרים</div>', unsafe_allow_html=True)
 
     col_cat, col_src = st.columns([1, 1])
@@ -698,8 +492,8 @@ with tab1:
     total_found = len(filtered)
     st.markdown(f"""
     <div style="display:flex;align-items:center;gap:10px;margin:16px 0 12px;">
-        <span style="font-weight:700;color:#f0fdf4;font-size:17px">{category if not search else "תוצאות חיפוש"}</span>
-        <span style="background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.25);border-radius:20px;padding:2px 12px;font-size:13px;color:#00c896;font-weight:600">{total_found:,} מוצרים</span>
+        <span style="font-weight:700;color:#1E293B;font-size:17px">{category if not search else "תוצאות חיפוש"}</span>
+        <span style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:20px;padding:2px 12px;font-size:13px;color:#047857;font-weight:600">{total_found:,} מוצרים</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -743,8 +537,8 @@ with tab2:
     if not st.session_state.cart:
         st.markdown("""
         <div style="text-align:center;padding:60px 20px;color:#4b5563;">
-            <div style="font-size:13px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;color:#374151">הסל ריק</div>
-            <div style="font-size:15px;color:#6b7280">עברו לטאב <strong style="color:#00c896">בחירת מוצרים</strong> כדי להתחיל</div>
+            <div style="font-size:13px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;color:#475569">הסל ריק</div>
+            <div style="font-size:15px;color:#6b7280">עברו לטאב <strong style="color:#10B981">בחירת מוצרים</strong> כדי להתחיל</div>
         </div>
         """, unsafe_allow_html=True)
     else:
@@ -753,8 +547,8 @@ with tab2:
         total_items = cart_df["quantity"].sum()
 
         st.markdown(f"""
-        <div style="background:linear-gradient(135deg,rgba(0,200,150,0.08),rgba(0,200,150,0.04));border:1px solid rgba(0,200,150,0.2);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.04)">
-            <span style="font-weight:700;color:#6ee7b7;font-size:16px">{len(cart_df)} פריטים שונים &nbsp;&middot;&nbsp; {int(total_items)} יחידות סה"כ</span>
+        <div style="background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.2);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-weight:700;color:#047857;font-size:16px">{len(cart_df)} פריטים שונים &nbsp;&middot;&nbsp; {int(total_items)} יחידות סה"כ</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -804,19 +598,19 @@ with tab3:
                 st.markdown(f"""
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <div class="kpi-label">עלות ILP מפוצל</div>
+                        <div class="kpi-label">עלות מפוצלת (ILP)</div>
                         <div class="kpi-value green">&#8362;{opt_total:.2f}</div>
                     </div>
-                    <div class="kpi-card single">
+                    <div class="kpi-card">
                         <div class="kpi-label">רשת זולה יחידה</div>
                         <div class="kpi-value">&#8362;{single_cost:.2f}</div>
                     </div>
-                    <div class="kpi-card savings">
+                    <div class="kpi-card">
                         <div class="kpi-label">חיסכון בפיצול</div>
                         <div class="kpi-value amber">&#8362;{saving:.2f} <span style="font-size:16px">({saving_pct}%)</span></div>
                     </div>
-                    <div class="kpi-card time">
-                        <div class="kpi-label">זמן פתרון ILP</div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">זמן פתרון</div>
                         <div class="kpi-value purple">{solve_time}s</div>
                     </div>
                 </div>
@@ -829,30 +623,30 @@ with tab3:
                         st.error(f"חריגה מהתקציב ב-{opt_total - budget:.2f} ILS")
 
                 # Chain comparison bars
-                st.markdown('<div style="margin:28px 0 12px"><strong style="font-size:16px;color:#f0fdf4">השוואת עלות לפי רשת</strong></div>', unsafe_allow_html=True)
+                st.markdown('<div style="margin:28px 0 12px"><strong style="font-size:16px;color:#1E293B">השוואת עלות לפי רשת</strong></div>', unsafe_allow_html=True)
                 if not costs_df.empty:
                     max_cost = costs_df["עלות סל"].max()
-                    chain_colors = {1: "#00c896", 2: "#ef4444", 3: "#3b82f6", 4: "#f59e0b"}
+                    chain_colors = {1: "#10B981", 2: "#EF4444", 3: "#3B82F6", 4: "#F59E0B"}
                     bars_html = ""
                     for _, row in costs_df.sort_values("עלות סל").iterrows():
                         pct = (row["עלות סל"] / max_cost * 100) if max_cost > 0 else 0
-                        color = chain_colors.get(int(row["chain_id"]), "#6b7280")
+                        color = chain_colors.get(int(row["chain_id"]), "#94A3B8")
                         is_best = row["עלות סל"] == costs_df["עלות סל"].min()
-                        best_tag = "<span style='background:rgba(0,200,150,0.15);color:#00c896;border:1px solid rgba(0,200,150,0.25);border-radius:10px;padding:2px 8px;font-size:11px;font-weight:700;margin-right:6px'>הכי זול</span>" if is_best else ""
+                        best_tag = "<span style='background:rgba(16,185,129,0.15);color:#047857;border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:2px 8px;font-size:11px;font-weight:700;margin-right:6px'>הכי זול</span>" if is_best else ""
                         bars_html += f"""
                         <div class="chain-bar-wrap">
                             <div class="chain-bar-label">
                                 <span>{best_tag}{row['רשת']}</span>
-                                <span style="font-weight:700;color:#f1f5f9">&#8362;{row['עלות סל']:.2f}</span>
+                                <span style="font-weight:700;color:#1E293B">&#8362;{row['עלות סל']:.2f}</span>
                             </div>
                             <div class="chain-bar-bg">
-                                <div class="chain-bar-fill" style="width:{pct:.1f}%;background:linear-gradient(90deg,{color}88,{color})"></div>
+                                <div class="chain-bar-fill" style="width:{pct:.1f}%;background:{color}"></div>
                             </div>
                         </div>"""
-                    st.markdown(f'<div style="background:linear-gradient(135deg,#0f1824,#0d1520);border-radius:16px;padding:22px;border:1px solid rgba(0,200,150,0.1);box-shadow:0 4px 20px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.03)">{bars_html}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="background:#FFFFFF;border-radius:16px;padding:22px;border:1px solid #E2E8F0;box-shadow:0 4px 10px rgba(0,0,0,0.03)">{bars_html}</div>', unsafe_allow_html=True)
 
                 # Per-product detail table
-                st.markdown('<div style="margin:28px 0 12px"><strong style="font-size:16px;color:#f0fdf4">פירוט רכישה אופטימלית לפי מוצר</strong></div>', unsafe_allow_html=True)
+                st.markdown('<div style="margin:28px 0 12px"><strong style="font-size:16px;color:#1E293B">פירוט רכישה אופטימלית לפי מוצר</strong></div>', unsafe_allow_html=True)
                 product_names = dict(zip(products["product_id"], products["product_name"]))
                 badge_class = {1: "badge-1", 2: "badge-2", 3: "badge-3", 4: "badge-4"}
 
@@ -869,7 +663,7 @@ with tab3:
                         <td>{name}</td>
                         <td style="text-align:center">{qty}</td>
                         <td><span class="chain-badge {bc}">{chain}</span></td>
-                        <td style="text-align:left;font-weight:700;color:#f1f5f9">&#8362;{cost:.2f}</td>
+                        <td style="text-align:left;font-weight:700;color:#1E293B">&#8362;{cost:.2f}</td>
                     </tr>"""
 
                 st.markdown(f"""
@@ -885,5 +679,3 @@ with tab3:
                     <tbody>{rows_html}</tbody>
                 </table>
                 """, unsafe_allow_html=True)
-
-#לא עושה כלום

@@ -325,6 +325,9 @@ def load_data():
         from init_db import load_csv_to_db
         load_csv_to_db()
     conn = sqlite3.connect(db_path)
+    conn.execute("DELETE FROM chains WHERE chain_id IN (4, 5)")
+    conn.execute("INSERT INTO chains (chain_id, chain_name) VALUES (4, 'ויקטורי'), (5, 'אושר עד')")
+    conn.commit()
     products = pd.read_sql_query("SELECT * FROM products", conn)
     chains = pd.read_sql_query("SELECT * FROM chains", conn)
     prices = pd.read_sql_query("SELECT * FROM prices", conn)

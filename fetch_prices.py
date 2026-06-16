@@ -41,6 +41,21 @@ def get_connection():
 
 def determine_category(product_name):
     name = product_name.lower()
+    
+    # 1. עדיפות עליונה: אוכל לחיות (כדי שלא יתבלבל עם מוצרים אחרים)
+    if any(k in name for k in ["כלב", "חתול", "אוכל לכלבים", "אוכל לחתולים", "חטיף לכלב"]):
+        return "כללי"
+        
+    # 2. זיהוי מותגים/סוגים (עדיפות גבוהה)
+    # גבינות ומחלבה
+    if any(k in name for k in ["גד", "יטבתה", "תנובה", "שטראוס", "סימפוניה"]):
+        return "ביצים, חלב וגבינות"
+        
+    # טואלטיקה (מותגים)
+    if any(k in name for k in ["דאב", "dove", "פינוק", "הד אנד שולדרס", "head & shoulders", "ג'ילט", "פנטן"]):
+        return "טואלטיקה"
+
+    # 3. זיהוי לפי מילות מפתח כלליות (אם לא מצא מותג)
     if any(k in name for k in ["ביצים", "חלב", "גבינה", "מעדן", "יוגורט", "שמנת"]):
         return "ביצים, חלב וגבינות"
     elif any(k in name for k in ["עוף", "בשר", "דג", "נקניק", "קצביה"]):
@@ -61,9 +76,8 @@ def determine_category(product_name):
         return "ירקות"
     elif any(k in name for k in ["תפוח", "בננה", "תפוז", "אגס", "אבוקדו", "ענב", "לימון"]):
         return "פירות"
+        
     return "כללי"
-
-
 import random
 
 def find_gz_link(index_url, base_url, file_keyword):

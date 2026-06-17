@@ -7,88 +7,75 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import io
 import re
+import random
 
 BASE_DIR = Path(__file__).parent
 DB_PATH = BASE_DIR / "cartiq.db"
 
-# שופרסל — מחירים ציבוריים ישירות מ-Azure Blob Storage
 SHUFERSAL_INDEX = "https://prices.shufersal.co.il/FileObject/UpdateCategory?catID=2&storeId=1"
-SHUFERSAL_BASE  = "https://prices.shufersal.co.il"
+SHUFERSAL_BASE = "https://prices.shufersal.co.il"
 SHUFERSAL_CHAIN_ID = 1
 
-# שאר הרשתות פועלות דרך publishedprices.co.il שדורש אימות.
-# לכן מחיריהן נגזרים ממחירי שופרסל עם מכפילי שוק ריאליים (מבוסס נתוני CSO / דוחות iPrice).
-# מקדמי תמחור ממוצע לעומת שופרסל:
 DERIVED_CHAINS = {
-    2: {"name": "רמי לוי",  "multiplier": 0.88, "noise": 0.08},
-    3: {"name": "יוחננוף",  "multiplier": 0.96, "noise": 0.06},
-    4: {"name": "ויקטורי",  "multiplier": 1.02, "noise": 0.07},
-    5: {"name": "אושר עד",  "multiplier": 0.90, "noise": 0.085},
+    2: {"name": "רמי לוי", "multiplier": 0.88, "noise": 0.08},
+    3: {"name": "יוחננוף", "multiplier": 0.96, "noise": 0.06},
+    4: {"name": "ויקטורי", "multiplier": 1.02, "noise": 0.07},
+    5: {"name": "אושר עד", "multiplier": 0.90, "noise": 0.085},
 }
 
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/120.0.0.0 Safari/537.36"
-    )
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
-
 
 def get_connection():
     return sqlite3.connect(DB_PATH)
 
-
 def determine_category(product_name):
     name = product_name.lower()
     
-    # 1. הגנות בטיחות (חיות וכללי)
-    if any(k in name for k in ["כלב","פריסקיז", "חתול", "פנסי","אוכל לכלבים", "אוכל לחתולים"]):
+    # 1. חסימת חיות
+    if any(k in name for k in ["כלב", "פריסקיז", "חתול", "פנסי", "אוכל לכלבים", "אוכל לחתולים"]):
         return "כללי"
         
+    # 2. משקאות ואלכוהול
     alcohol_brands = ["גולדסטאר", "היינקן", "קרלסברג", "טובורג", "אבסולוט", "פינלנדיה", "ג'וני ווקר", "ג'יימסון", "ערק", "כרמל", "ברקן", "רמת הגולן"]
-    drinks_keywords = ["מים", "ארק","גין","סודה", "בירה", "יין", "וודקה", "ויסקי", "ערק", "ג'ין", "מיץ", "קולה", "ספרייט", "משקה", "נקטר", "תה קר"]
-    
+    drinks_keywords = ["מים", "ארק", "ג'ין", "סודה", "בירה", "יין", "וודקה", "ויסקי", "ערק", "ג'ין", "מיץ", "קולה", "ספרייט", "משקה", "נקטר", "תה קר"]
     if any(k in name for k in alcohol_brands + drinks_keywords):
         return "משקאות ואלכוהול"
 
-    # 2. מותגי מתוקים וחטיפים
-    sweets_brands = ["עלית", "קינדר", "אוסם", "פרינגלס", "שטראוס", "נסטלה", "כרמית", "יוניליוור", "קורני", "דגנ", "קורנפלקס"]
-    if any(k in name for k in sweets_brands + ["שוקולד","שלגונ" "במבה", "ביסלי", "עוגיות", "וופל", "חטיף", "גליד"]):
+    # 3. מתוקים וחטיפים
+    sweets_brands = ["עלית", "קינדר", "אוסם", "פרינגלס", "שטראוס", "נסטלה", "כרמית", "יוניליוור", "קורני", "דגני בוקר", "קורנפלקס"]
+    if any(k in name for k in sweets_brands + ["שוקולד", "שלגון", "במבה", "ביסלי", "עוגיות", "וופל", "חטיף", "גלידה"]):
         return "מתוקים וחטיפים"
         
-    # מזווה (שימורים, יבשים, רטבים, קטניות, תבלינים)
+    # 4. מזווה
     pantry_brands = ["סוגת", "יכין", "קנור", "היינץ", "אוסם", "תלמה", "וילי פוד", "שופרסל", "טעמן"] 
-    pantry_keywords = ["בטעם עוף","אורז","מרק עוף","בשמן", "גלטין","פסטה", "קוסקוס", "טונה", "שימורים", "רסק", "רוטב", "סוכר","גלטין","חתיכות","הרינג", "קמח","מחית", "מצות","שמן", "תבלין","פלפל שחור", "מלח", "קטניות", "עדשים", "שעועית", "פירורי לחם", "טחינה", "קפה", "תה"]
-    
+    pantry_keywords = ["בטעם עוף", "אורז", "מרק עוף", "בשמן", "גלטין", "פסטה", "קוסקוס", "טונה", "שימורים", "רסק", "רוטב", "סוכר", "חתיכות", "הרינג", "קמח", "מחית", "מצות", "שמן", "תבלין", "פלפל שחור", "מלח", "קטניות", "עדשים", "שעועית", "פירורי לחם", "טחינה", "קפה", "תה"]
     if any(k in name for k in pantry_brands + pantry_keywords):
         return "מזווה"
 
-    # 3. מותגי גבינות ומחלבה (החזרתי אותם!)
+    # 5. גבינות ומחלבה
     dairy_brands = ["גד", "יטבתה", "תנובה", "שטראוס", "סימפוניה", "טרה"]
     if any(k in name for k in dairy_brands + ["ביצים", "חלב", "גבינה", "מעדן", "יוגורט", "שמנת"]):
         return "ביצים, חלב וגבינות"
 
-    # 4. טואלטיקה
-    toiletries_brands = ["דאב",אקוה", "פינוק", "הד אנד שולדרס", "פנטן", "ג'ילט", "לוריאל", "קולגייט"]
-    if any(k in name for k in toiletries_brands + ["סבון","גילוח", "שמפו", "מרכך", "דאודורנט", "שיני", "משחת שיניים"]):
+    # 6. טואלטיקה
+    toiletries_brands = ["דאב", "אקוה", "פינוק", "הד אנד שולדרס", "פנטן", "ג'ילט", "לוריאל", "קולגייט"]
+    if any(k in name for k in toiletries_brands + ["סבון", "גילוח", "שמפו", "מרכך", "דאודורנט", "שיני", "משחת שיניים"]):
         return "טואלטיקה"
 
-    # 5. שאר הקטגוריות
-    if any(k in name for k in ["עוף", "בשר", "דג", "נקניק"]):
-        return "קצביה"
-    elif any(k in name for k in ["קפוא","מוקפא", "שניצל", "פיצה"]):
-        return "מוצרים קפואים"
-    elif any(k in name for k in ["לחם", "פיתה", "עוגה", "מאפה"]):
-        return "מאפים ולחם"
-    elif any(k in name for k in ["אקונומיקה", "ניקוי", "שקיות אשפה"]):
-        return "מוצרי ניקוי"
-    elif any(k in name for k in ["עגבני", "מלפפון", "גזר", "פלפל"]):
-        return "ירקות"
-    elif any(k in name for k in ["תפוח", "בננה", "תפוז", "אגס"]):
-        return "פירות"
+    # 7. שאר הקטגוריות
+    if any(k in name for k in ["עוף", "בשר", "דג", "נקניק"]): return "קצביה"
+    if any(k in name for k in ["קפוא", "מוקפא", "שניצל", "פיצה"]): return "מוצרים קפואים"
+    if any(k in name for k in ["לחם", "פיתה", "עוגה", "מאפה"]): return "מאפים ולחם"
+    if any(k in name for k in ["אקונומיקה", "ניקוי", "שקיות אשפה"]): return "מוצרי ניקוי"
+    if any(k in name for k in ["עגבני", "מלפפון", "גזר", "פלפל"]): return "ירקות"
+    if any(k in name for k in ["תפוח", "בננה", "תפוז", "אגס"]): return "פירות"
         
     return "כללי"
+
+# ... (שאר הפונקציות: find_gz_link, download_and_parse, parse_and_store_xml, fetch_shufersal, derive_prices_for_chain, fetch_all_chains)
+# הן נשארות כפי שהיו לך, הן היו תקינות.
 import random
 
 def find_gz_link(index_url, base_url, file_keyword):

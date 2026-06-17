@@ -43,7 +43,7 @@ def determine_category(product_name):
     name = product_name.lower()
     
     # 1. הגנות בטיחות (חיות וכללי)
-    if any(k in name for k in ["כלב", "חתול", "אוכל לכלבים", "אוכל לחתולים"]):
+    if any(k in name for k in ["כלב", "חתול", "פנסי","אוכל לכלבים", "אוכל לחתולים"]):
         return "כללי"
 
     # 2. מותגי מתוקים וחטיפים

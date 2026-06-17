@@ -70,7 +70,7 @@ def determine_category(product_name):
     # 5. שאר הקטגוריות
     if any(k in name for k in ["עוף", "בשר", "דג", "נקניק"]):
         return "קצביה"
-    elif any(k in name for k in ["קפוא", "שניצל", "פיצה"]):
+    elif any(k in name for k in ["קפוא","מוקפא", "שניצל", "פיצה"]):
         return "מוצרים קפואים"
     elif any(k in name for k in ["לחם", "פיתה", "עוגה", "מאפה"]):
         return "מאפים ולחם"

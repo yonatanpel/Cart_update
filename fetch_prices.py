@@ -77,7 +77,7 @@ def determine_category(product_name):
     if any(k in name for k in ["עגבני", "תפוח אדמה", "מלפפון", "גזר", "פלפל"]): return "ירקות"
     
     # הנה השורה המתוקנת (שמתי גרש סוגר אחרי פלפל שחור):
-    if any(k in name for k in ["שיבולת שועל", "אורז", "סוכר", "מלח", "פלפל שחור"]): return "מזווה"
+    if any(k in name for k in ["שיבולת שועל","דייסת" "אורז", "סוכר", "מלח", "פלפל שחור"]): return "מזווה"
     
     if any(k in name for k in ["תפוח", "בננה", "תפוז", "אגס"]): return "פירות"
         

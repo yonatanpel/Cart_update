@@ -69,11 +69,15 @@ def determine_category(product_name):
         return "טואלטיקה"
 
     # 8. שאר הקטגוריות
+   # 8. שאר הקטגוריות
     if any(k in name for k in ["עוף", "בשר", "דג", "נקניק"]): return "קצביה"
     if any(k in name for k in ["קפוא", "מוקפא", "שניצל", "פיצה"]): return "מוצרים קפואים"
     if any(k in name for k in ["לחם", "פיתה", "עוגה", "מאפה"]): return "מאפים ולחם"
-    if any(k in name for k in ["עגבני","תפוח אדמה", "מלפפון", "גזר", "פלפל"]): return "ירקות"
-    if any(k in name for k in ["שיבולת שועל","אורז","סוכר","מלח","פלפל שחור"]): return "מזווה"
+    if any(k in name for k in ["עגבני", "תפוח אדמה", "מלפפון", "גזר", "פלפל"]): return "ירקות"
+    
+    # כאן הוספתי את הגרש שהיה חסר:
+    if any(k in name for k in ["שיבולת שועל", "אורז", "סוכר", "מלח", "פלפל שחור"]): return "מזווה"
+    
     if any(k in name for k in ["תפוח", "בננה", "תפוז", "אגס"]): return "פירות"
         
     return "כללי"
